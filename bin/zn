@@ -1,0 +1,23 @@
+#!/bin/zsh
+
+########################################
+# zn = 'zettelkasten new' 
+#
+# create a new filename  
+#
+# example usage: zn / foo bar
+# example usage: zn 1-foo-bar.md TAG foo bar
+########################################
+
+SCRIPT_DIR=`dirname "$0"`
+
+FILENAME=`python ${SCRIPT_DIR}/../library/zettelkasten.py generate_filename "$@" | tr -d '\n'`
+echo ${FILENAME}
+echo ${FILENAME} > /tmp/zettelkasten.out 
+
+DATE=`date +%F`
+echo "_Created:${DATE}_" >> ${FILENAME}
+echo "_Tags:_" >> ${FILENAME}
+echo "\n" >> ${FILENAME}
+
+nvim -c 'startinsert' + ${FILENAME}
