@@ -1,0 +1,39 @@
+#!/bin/zsh
+
+########################################
+# zl = 'zettelkasten list' 
+#
+# list zettelkasten 
+#
+# example usage: zl
+# 
+# use '?' to toggle preview
+# use 'ctrl-n' to list by name
+# use 'ctrl-u' to list by last updated
+########################################
+
+SCRIPT_DIR=`dirname "$0"`
+
+# assemble a filename from the components that are returned from zettelkasten.py 
+cmd_assemble_filename='tr -s " " | cut -d" " -f2- | sed "s/$/.md/" | sed "s/ /-/g"'
+alias fn_assemble_filename=${cmd_assemble_filename}
+
+# fzf configuration 
+function fn_fzf() {
+    fzf --no-sort \
+    --exact \
+    --preview "echo {} | ${cmd_assemble_filename} | xargs cat" \
+    --preview-window='hidden' \
+    --bind='?:toggle-preview' \
+    --bind "ctrl-n:reload(python ${SCRIPT_DIR}/../library/zettelkasten.py list_by_uid)" \
+    --bind "ctrl-u:reload(python ${SCRIPT_DIR}/../library/zettelkasten.py list_by_last_modified)"
+}
+
+# list! 
+RESULT=`python ${SCRIPT_DIR}/../library/zettelkasten.py list_by_uid | 
+fn_fzf | 
+fn_assemble_filename`
+
+# output result
+echo $RESULT 
+echo $RESULT > /tmp/zettelkasten.out

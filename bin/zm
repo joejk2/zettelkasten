@@ -1,0 +1,38 @@
+#!/bin/zsh
+
+########################################
+# zm = 'zettelkasten move' 
+#
+# move a file and update all references to it 
+#
+# example usage: zm 1a-foo-bar.md /
+# example usage: zm 1-foo-bar.md 3 new description 
+########################################
+ 
+# setup
+SCRIPT_DIR=`dirname "$0"`
+OLD_FILENAME=${1}
+if [[ ! -f ${OLD_FILENAME} ]]
+then
+    echo "${OLD_FILENAME}: No such file"
+    exit 0
+fi
+
+# determine new filename
+NEW_FILENAME=`python ${SCRIPT_DIR}/../library/zettelkasten.py rename_file "$@"`
+if [ $? -ne 0 ]; then
+  echo "Failed to determine new filename"
+  exit 0
+fi
+
+# change references and move file
+grep -rl "${OLD_FILENAME}" ${PWD} | xargs sed -i ".bak" "s/${OLD_FILENAME}/${NEW_FILENAME}/g"
+mv ${OLD_FILENAME} ${NEW_FILENAME}
+
+# archive backups 
+BACKUP_DIR="/tmp/backup_${PWD##*/}-`date +"%F-%T"`"
+mkdir ${BACKUP_DIR}
+(mv *bak ${BACKUP_DIR}) 2>/dev/null
+
+# print status 
+echo new file: ${NEW_FILENAME}  

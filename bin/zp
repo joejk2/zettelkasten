@@ -1,0 +1,10 @@
+#!/bin/zsh
+
+########################################
+# zc = 'zettelkasten clipboard' 
+#
+# print the most recent filename 
+#
+# example usage: zc 
+########################################
+cat /tmp/zettelkasten.out
