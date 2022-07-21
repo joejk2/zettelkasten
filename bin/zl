@@ -9,7 +9,7 @@
 # 
 # use '?' to toggle preview
 # use 'ctrl-n' to list by name
-# use 'ctrl-u' to list by last updated
+# use 'ctrl-l' to list by last updated
 ########################################
 
 SCRIPT_DIR=`dirname "$0"`
@@ -26,7 +26,7 @@ function fn_fzf() {
     --preview-window='hidden' \
     --bind='?:toggle-preview' \
     --bind "ctrl-n:reload(python ${SCRIPT_DIR}/../library/zettelkasten.py list_by_uid)" \
-    --bind "ctrl-u:reload(python ${SCRIPT_DIR}/../library/zettelkasten.py list_by_last_modified)"
+    --bind "ctrl-l:reload(python ${SCRIPT_DIR}/../library/zettelkasten.py list_by_last_modified)"
 }
 
 # list! 
