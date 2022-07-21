@@ -96,7 +96,7 @@ The list (`zl`) will be shown as:
             3a2         scalene
            3b           quadrilateral
 
-The list can be ordered by last updated time with `ctrl-u`:
+The list can be ordered by last updated time with `ctrl-l`:
 
     07-20 1             foo
           2             bar
