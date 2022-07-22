@@ -59,7 +59,7 @@ def select_tags(text: str) -> str:
 
 
 def select_description(text: str) -> str:
-    return " ".join([word for word in text.split("-") if str.islower(word)])
+    return " ".join([word for word in text.split("-") if not str.isupper(word)])
 
 
 ####################################################################################################
@@ -191,7 +191,9 @@ def max_tag_chars(filename_components):
     return max([len(c["tags"]) for c in filename_components])
 
 
-def list_arranged(filename_components, break_on_uid=False, break_on_date=False):
+def list_arranged(
+    filename_components, break_on_uid=False, break_on_date=False, reverse=None
+):
     print_components = []
     _max_uid_chars = max_uid_chars(filename_components)
     _max_tag_chars = max_tag_chars(filename_components)
@@ -223,20 +225,24 @@ def list_arranged(filename_components, break_on_uid=False, break_on_date=False):
         last_date = c["date"]
         last_uid_zeroth = uid_cs[0]
 
-    return "\n".join(["".join(c) for c in print_components[::-1]])
-
-
-def list_by_uid():
-    return list_arranged(
-        list_decomposed(list_sorted(list_dated(), sort_by_last_modified=False)),
-        break_on_uid=True,
+    return "\n".join(
+        ["".join(c) for c in print_components[:: -1 if reverse is None else 1]]
     )
 
 
-def list_by_last_modified():
+def list_by_uid(reverse=None):
+    return list_arranged(
+        list_decomposed(list_sorted(list_dated(), sort_by_last_modified=False)),
+        break_on_uid=True,
+        reverse=reverse,
+    )
+
+
+def list_by_last_modified(reverse=None):
     return list_arranged(
         list_decomposed(list_sorted(list_dated(), sort_by_last_modified=True)),
         break_on_date=True,
+        reverse=reverse,
     )
 
 

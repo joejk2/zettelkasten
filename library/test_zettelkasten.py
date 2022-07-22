@@ -30,6 +30,7 @@ def test_select_tags():
 
 def test_select_description():
     assert select_description("TAG1-TAG2-foo-bar") == "foo bar"
+    assert select_description("2022-foo") == "2022 foo"
 
 
 def test_uid_components():
@@ -105,21 +106,3 @@ def test_list_sorted():
 def test_list_decomposed():
     l = list_decomposed(DATED_FILES)
     assert len(l) == 3
-
-
-def test_list_arranged():
-    pass
-
-
-"""
-TODO - 
-    tidy and test rename_file
-    tidy and test list functionality 
-    check in 
-    
-    tidy scripts 
-    check in 
-    
-    README
-    check in 
-"""
