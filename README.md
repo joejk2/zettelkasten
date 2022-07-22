@@ -36,20 +36,25 @@ Produces:
 
 ### Move Zettelkasten files (`zm`)
 
-    echo a link to file 2-bar.md >> 1a-another-thought.md
+Moving means both renaming the file and all references to it.
+
+Insert reference:
+
+    echo "a link to file 2-bar.md" >> 1a-another-thought.md
+
+Move the file:
+
     zm 2-bar.md 1a
 
-Produces:
+New hierarchy:
 
     07-20 1       foo
            1a     another thought
             1a1   bar
 
-References are also updated:
+Updated reference:
 
-    tail -n -1 1a-another-thought.md
-
-    > a link to file 1a1-bar.md
+    a link to file 1a1-bar.md
 
 
 STRUCTURE
