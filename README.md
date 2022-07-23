@@ -64,9 +64,11 @@ STRUCTURE
 
 Filenames have the following structure:
 
-    12a1-TAG1-TAG2-a-short-description.md
+    12a1-TAG1-TAG2-a-short-description-of-topic-A.md
     ^    ^
-    UID  TEXT (comprised of TAGS, in all-caps, and the DESCRIPTION)
+    UID  TAGS      ^ DESCRIPTION
+
+Tags are prefaced, all-caps.
 
 ### UID
 

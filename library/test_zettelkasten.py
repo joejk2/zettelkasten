@@ -1,12 +1,6 @@
 import pytest
 from zettelkasten import *
 
-# FILENAMES = [
-#     dict(filename="1~2022-05-31~foo-bar.md", id="1"),
-#     dict(filename="1,1~2022-05-31~foo-bar.md", id="1"),
-#     dict(filename="1,1,1~2022-05-31~foo-bar.md", id="1"),
-# ]
-
 
 def test_dash_separated():
     assert dash_separated("foo BAR") == "foo-BAR"
@@ -24,13 +18,16 @@ def test_select_uid():
     assert select_uid("1a") == "1a"
 
 
-def test_select_tags():
-    assert select_tags("TAG1-TAG2-foo-bar") == "TAG1 TAG2"
-
-
-def test_select_description():
-    assert select_description("TAG1-TAG2-foo-bar") == "foo bar"
-    assert select_description("2022-foo") == "2022 foo"
+def test_select_tags_description():
+    print(select_tags_description("TAG1-TAG2"))
+    assert select_tags_description("TAG1-TAG2") == ("TAG1 TAG2", "")
+    assert select_tags_description("foo-bar") == ("", "foo bar")
+    assert select_tags_description("2022-foo") == ("", "2022 foo")
+    assert select_tags_description("TAG1-TAG2-foo-bar") == ("TAG1 TAG2", "foo bar")
+    assert select_tags_description("TAG1-TAG2-topic-A-and-topic-B") == (
+        "TAG1 TAG2",
+        "topic A and topic B",
+    )
 
 
 def test_uid_components():
