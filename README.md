@@ -44,7 +44,7 @@ Insert reference:
 
 Move the file:
 
-    zm 2-bar.md 1a
+    zm 2-bar.md 1a1-bar.md
 
 New hierarchy:
 

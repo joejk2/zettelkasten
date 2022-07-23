@@ -10,20 +10,13 @@
 ########################################
  
 # setup
-SCRIPT_DIR=`dirname "$0"`
 OLD_FILENAME=${1}
 if [[ ! -f ${OLD_FILENAME} ]]
 then
     echo "${OLD_FILENAME}: No such file"
     exit 0
 fi
-
-# determine new filename
-NEW_FILENAME=`python ${SCRIPT_DIR}/../library/zettelkasten.py rename_file "$@"`
-if [ $? -ne 0 ]; then
-  echo "Failed to determine new filename"
-  exit 0
-fi
+NEW_FILENAME=${2}
 
 # change references and move file
 grep -rl "${OLD_FILENAME}" ${PWD} | xargs sed -i ".bak" "s/${OLD_FILENAME}/${NEW_FILENAME}/g"

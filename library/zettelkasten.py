@@ -140,19 +140,6 @@ def generate_filename(parent: str, *args):
     return join_filename_components(*generate_filename_components(parent, *args))
 
 
-def rename_file(old_filename: str, parent: str, *args) -> str:
-    new = generate_filename_components(parent, *args)
-    old = select_filename_components(old_filename)
-
-    if new[0][:-1] == old[0][:-1]:
-        raise ValueError("New and old file have the same parent!")
-
-    return join_filename_components(
-        new[0],  # uid
-        new[1] if new[1] != "" else old[1],  # text
-    )
-
-
 ####################################################################################################
 # List files
 ####################################################################################################

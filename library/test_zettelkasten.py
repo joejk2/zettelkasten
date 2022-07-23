@@ -71,15 +71,6 @@ def test_generate_uid():
     assert generate_uid("1a", ["1", "1a1", "1c1a1"]) == "1a2"
 
 
-def test_rename_file():
-    assert rename_file("1a1-FOO-bar.md", "2") == "2a-FOO-bar.md"
-    assert rename_file("1a1-FOO-bar.md", "2", "foo-bar") == "2a-foo-bar.md"
-    with pytest.raises(ValueError):
-        rename_file("1-FOO-bar.md", "/")
-    with pytest.raises(ValueError):
-        rename_file("1a1-FOO-bar.md", "1a")
-
-
 DATED_FILES = [
     ("06-20", "1-foo.md"),
     ("06-20", "2-foobar.md"),
