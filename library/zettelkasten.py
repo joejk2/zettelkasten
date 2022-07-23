@@ -1,3 +1,16 @@
+####################################################################################################
+# This module helps create and list zettelkasten files.
+#
+# Each filename has the following structure:
+#
+#     12a1-TAG1-TAG2-a-short-description-of-topic-A.md
+#     ^    ^
+#     UID  TAGS      ^ DESCRIPTION
+#
+# Tags are prefaced, all-caps.
+####################################################################################################
+
+
 import glob
 import os
 import re
@@ -5,18 +18,6 @@ import time
 import sys
 
 DELIM = "-"
-
-
-####################################################################################################
-# This module helps create and list zettelkasten files.
-#
-# Each filename has the following structure:
-#
-#     12a1-TAG1-TAG2-a-short-description.md
-#     ^    ^
-#     UID  TEXT (comprised of TAGS, in all-caps, and the DESCRIPTION)
-#
-####################################################################################################
 
 
 def dash_separated(*args):
@@ -54,12 +55,17 @@ def select_text(filename: str) -> str:
     return "-".join(filename.split(".md")[0].split(DELIM)[1:])
 
 
-def select_tags(text: str) -> str:
-    return " ".join([word for word in text.split("-") if str.isupper(word)])
-
-
-def select_description(text: str) -> str:
-    return " ".join([word for word in text.split("-") if not str.isupper(word)])
+def select_tags_description(text: str) -> str:
+    tags, description = [], []
+    reading_tags = True
+    for word in text.split("-"):
+        if not str.isupper(word):
+            reading_tags = False
+        if reading_tags:
+            tags.append(word)
+        else:
+            description.append(word)
+    return " ".join(tags), " ".join(description)
 
 
 ####################################################################################################
@@ -173,11 +179,11 @@ def list_decomposed(dated_files):
         dict(
             date=date,
             uid=select_uid(filename),
-            tags=select_tags(text),
-            description=select_description(text),
+            tags=tags,
+            description=description,
         )
         for date, filename in dated_files
-        for text in [select_text(filename)]
+        for tags, description in [select_tags_description(select_text(filename))]
     ]
 
 
