@@ -1,0 +1,10 @@
+#!/bin/zsh
+
+########################################
+# zv = 'zettelkasten vim' 
+#
+# open the most recently listed file in vim  
+#
+# example usage: zv
+########################################
+zp | xargs nvim
