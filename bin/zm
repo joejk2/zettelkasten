@@ -5,8 +5,7 @@
 #
 # move a file and update all references to it 
 #
-# example usage: zm 1a-foo-bar.md /
-# example usage: zm 1-foo-bar.md 3 new description 
+# example usage: zm 1a-foo.md  2-bar.md 
 ########################################
  
 # setup
