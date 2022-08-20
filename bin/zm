@@ -7,15 +7,31 @@
 #
 # example usage: zm 1a-foo.md  2-bar.md 
 ########################################
+
+# configuration
+suffix=".md"
+
+# preliminary checks
+if [ $# -ne 2 ]; then
+  echo "Usage: OLD_FILENAME NEW_FILENAME"
+  exit 0
+fi
+
+if [[ ! "${1}" == *"$suffix" || ! "${2}" == *"$suffix" ]]; then
+  echo "Usage: expect to operate on $suffix files" 
+  exit 0
+fi
  
 # setup
 OLD_FILENAME=${1}
+NEW_FILENAME=${2}
+
+# final checks
 if [[ ! -f ${OLD_FILENAME} ]]
 then
     echo "${OLD_FILENAME}: No such file"
     exit 0
 fi
-NEW_FILENAME=${2}
 
 # change references and move file
 grep -rl "${OLD_FILENAME}" ${PWD} | xargs sed -i ".bak" "s/${OLD_FILENAME}/${NEW_FILENAME}/g"
