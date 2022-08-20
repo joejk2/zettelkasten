@@ -27,4 +27,5 @@ mkdir ${BACKUP_DIR}
 (mv *bak ${BACKUP_DIR}) 2>/dev/null
 
 # print status 
-echo new file: ${NEW_FILENAME}  
+echo ${NEW_FILENAME}  
+echo ${NEW_FILENAME} > /tmp/zettelkasten.out
