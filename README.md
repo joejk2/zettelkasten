@@ -10,8 +10,11 @@ Dependencies:
 - nvim
 - [fzf](https://github.com/junegunn/fzf) (only needed for search features)
 
-Configuration:
-- add _zettelkasten/bin_ to your path
+Set the following in your shell:
+
+    export ZETTELKASTEN_SOURCE=$DEV/zettelkasten
+    source $ZETTELKASTEN_SOURCE/bin/aliases.sh
+    export PATH=${PATH}:$ZETTELKASTEN_SOURCE
 
 
 EXAMPLES
@@ -123,7 +126,7 @@ ALL COMMANDS
 - `zl`: **list** files
 - `zm`: **move** file and update references
 - `zg`: **grep** files
-- `zp`: **print** last file created, moved, or chosen from a search
+- `zp`: **print** print the previous file created or chosen
 
 REFERENCES
 ====================

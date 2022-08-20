@@ -1,10 +1,10 @@
 #!/bin/zsh
 
 ########################################
-# zp = 'zettelkasten paste' 
+# zp = 'zettelkasten previous' 
 #
-# print the most recently listed filename 
+# print the filename previously created or chosen
 #
 # example usage: zp
 ########################################
-cat /tmp/zettelkasten.out 
+echo $zp 

@@ -34,6 +34,5 @@ RESULT=`python ${SCRIPT_DIR}/../library/zettelkasten.py list_by_uid |
 fn_fzf | 
 fn_assemble_filename`
 
-# output result
-echo $RESULT 
-echo $RESULT > /tmp/zettelkasten.out
+# export result
+export zp=$RESULT

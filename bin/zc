@@ -1,8 +1,0 @@
-#!/bin/zsh
-
-########################################
-# zv = 'zettelkasten copy' 
-#
-# copy the most recently listed filename to the clipboard
-########################################
-zp | tr -d '\n' | pbcopy  

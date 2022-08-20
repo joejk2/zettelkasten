@@ -14,12 +14,12 @@ suffix=".md"
 # preliminary checks
 if [ $# -ne 2 ]; then
   echo "Usage: OLD_FILENAME NEW_FILENAME"
-  exit 0
+  return 0
 fi
 
 if [[ ! "${1}" == *"$suffix" || ! "${2}" == *"$suffix" ]]; then
   echo "Usage: expect to operate on $suffix files" 
-  exit 0
+  return 0
 fi
  
 # setup
@@ -30,7 +30,7 @@ NEW_FILENAME=${2}
 if [[ ! -f ${OLD_FILENAME} ]]
 then
     echo "${OLD_FILENAME}: No such file"
-    exit 0
+    return 0
 fi
 
 # change references and move file
@@ -42,6 +42,6 @@ BACKUP_DIR="/tmp/backup_${PWD##*/}-`date +"%F-%T"`"
 mkdir ${BACKUP_DIR}
 (mv *bak ${BACKUP_DIR}) 2>/dev/null
 
-# print status 
+# print and export new filename
 echo ${NEW_FILENAME}  
-echo ${NEW_FILENAME} > /tmp/zettelkasten.out
+export zp=$NEW_FILENAME

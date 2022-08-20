@@ -9,12 +9,14 @@
 # example usage: zn 1-foo-bar.md TAG foo bar
 ########################################
 
+# setup 
 SCRIPT_DIR=`dirname "$0"`
 
+# determine filename and export result
 FILENAME=`python ${SCRIPT_DIR}/../library/zettelkasten.py generate_filename "$@" | tr -d '\n'`
-echo ${FILENAME}
-echo ${FILENAME} > /tmp/zettelkasten.out 
+export zp=$FILENAME
 
+# write header 
 DATE=`date +%F`
 echo "_Created:${DATE}_" >> ${FILENAME}
 echo "_Tags:_" >> ${FILENAME}

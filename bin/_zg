@@ -24,5 +24,7 @@ FZF_DEFAULT_COMMAND="rg --files" fzf \
   --preview "rg -i --pretty --context 2 {q} {}" | cut -d":" -f1,2
 )
 
-echo $selected
-echo $selected > /tmp/zettelkasten.out 
+# export result
+export zp=$selected 
+
+

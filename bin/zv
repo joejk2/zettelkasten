@@ -7,4 +7,4 @@
 #
 # example usage: zv
 ########################################
-zp | xargs nvim
+echo $zp | xargs nvim
