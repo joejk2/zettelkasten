@@ -1,0 +1,10 @@
+#!/bin/zsh
+
+########################################
+# zc = 'zettelkasten copy' 
+#
+# copy the filename previously created or chosen
+#
+# example usage: zc
+########################################
+zp | tr -d '\n' | pbcopy 
