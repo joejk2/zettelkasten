@@ -5,7 +5,9 @@
 #
 # list zettelkasten 
 #
-# example usage: zl
+# example usage: 
+#     'zl'     - lists all files
+#     'zl 25g' - lists all files with prefix 25g
 # 
 # use '?' to toggle preview
 # use 'ctrl-n' to list by name
@@ -13,6 +15,8 @@
 ########################################
 
 SCRIPT_DIR=`dirname "$0"`
+DEFAULT_PREFIX="*"
+PREFIX="${1:-$DEFAULT_PREFIX}"
 
 # assemble a filename from the components that are returned from zettelkasten.py 
 cmd_assemble_filename='tr -s " " | cut -d" " -f2- | sed "s/$/.md/" | sed "s/ /-/g"'
@@ -25,12 +29,12 @@ function fn_fzf() {
     --preview "echo {} | ${cmd_assemble_filename} | xargs cat" \
     --preview-window='hidden' \
     --bind='?:toggle-preview' \
-    --bind "ctrl-n:reload(python ${SCRIPT_DIR}/../library/zettelkasten.py list_by_uid)" \
-    --bind "ctrl-l:reload(python ${SCRIPT_DIR}/../library/zettelkasten.py list_by_last_modified)"
+    --bind "ctrl-n:reload(python ${SCRIPT_DIR}/../library/zettelkasten.py list_by_uid $PREFIX -1)" \
+    --bind "ctrl-l:reload(python ${SCRIPT_DIR}/../library/zettelkasten.py list_by_last_modified $PREFIX -1)"
 }
 
 # list! 
-RESULT=`python ${SCRIPT_DIR}/../library/zettelkasten.py list_by_uid | 
+RESULT=`python ${SCRIPT_DIR}/../library/zettelkasten.py list_by_uid $PREFIX -1 | 
 fn_fzf | 
 fn_assemble_filename`
 

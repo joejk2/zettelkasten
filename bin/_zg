@@ -26,5 +26,3 @@ FZF_DEFAULT_COMMAND="rg --files" fzf \
 
 # export result
 export zp=$selected 
-
-

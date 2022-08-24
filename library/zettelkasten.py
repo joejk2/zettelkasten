@@ -143,10 +143,10 @@ def generate_filename(parent: str, *args):
 ####################################################################################################
 # List files
 ####################################################################################################
-def list_dated():
+def list_dated(prefix='*'):
     return [
         (time.strftime("%m-%d", time.localtime(os.path.getmtime(f))), f)
-        for f in glob.glob("*.md")
+        for f in glob.glob(f"{prefix}*.md")
     ]
 
 
@@ -185,7 +185,7 @@ def max_tag_chars(filename_components):
 
 
 def list_arranged(
-    filename_components, break_on_uid=False, break_on_date=False, reverse=None
+    filename_components, break_on_uid=False, break_on_date=False, order=1
 ):
     print_components = []
     _max_uid_chars = max_uid_chars(filename_components)
@@ -219,23 +219,23 @@ def list_arranged(
         last_uid_zeroth = uid_cs[0]
 
     return "\n".join(
-        ["".join(c) for c in print_components[:: -1 if reverse is None else 1]]
+        ["".join(c) for c in print_components[::int(order)]]
     )
 
 
-def list_by_uid(reverse=None):
+def list_by_uid(prefix=None, order=1):
     return list_arranged(
-        list_decomposed(list_sorted(list_dated(), sort_by_last_modified=False)),
+        list_decomposed(list_sorted(list_dated(prefix), sort_by_last_modified=False)),
         break_on_uid=True,
-        reverse=reverse,
+        order=order,
     )
 
 
-def list_by_last_modified(reverse=None):
+def list_by_last_modified(prefix=None, order=1):
     return list_arranged(
-        list_decomposed(list_sorted(list_dated(), sort_by_last_modified=True)),
+        list_decomposed(list_sorted(list_dated(prefix), sort_by_last_modified=True)),
         break_on_date=True,
-        reverse=reverse,
+        order=order,
     )
 
 
