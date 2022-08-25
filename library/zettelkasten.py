@@ -206,7 +206,7 @@ def list_arranged(
                 c["date"] if c["date"] != last_date else "\u00A0" + " " * 4,
                 # preface with spaces for every level to the UID:
                 "  " * len(uid_cs),
-                c["uid"],
+                '`' + c["uid"],
                 # pad up to _max_uid_chars + 2:
                 " " * (_max_uid_chars - len(uid_cs) - len(c["uid"]) + 2),
                 c["tags"],

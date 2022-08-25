@@ -19,7 +19,7 @@ DEFAULT_PREFIX="*"
 PREFIX="${1:-$DEFAULT_PREFIX}"
 
 # assemble a filename from the components that are returned from zettelkasten.py 
-cmd_assemble_filename='tr -s " " | cut -d" " -f2- | sed "s/$/.md/" | sed "s/ /-/g"'
+cmd_assemble_filename='tr -s " " | cut -d" " -f2- | sed "s/\`//" | sed "s/$/.md/" | sed "s/ /-/g"'
 alias fn_assemble_filename=${cmd_assemble_filename}
 
 # fzf configuration 
