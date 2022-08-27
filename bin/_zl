@@ -29,8 +29,8 @@ function fn_fzf() {
     --preview "echo {} | ${cmd_assemble_filename} | xargs cat" \
     --preview-window='hidden' \
     --bind='?:toggle-preview' \
-    --bind "ctrl-n:reload(python ${SCRIPT_DIR}/../library/zettelkasten.py list_by_uid $PREFIX -1)" \
-    --bind "ctrl-l:reload(python ${SCRIPT_DIR}/../library/zettelkasten.py list_by_last_modified $PREFIX -1)"
+    --bind "ctrl-n:reload(python ${SCRIPT_DIR}/../library/zettelkasten.py list_by_uid '$PREFIX' -1)" \
+    --bind "ctrl-l:reload(python ${SCRIPT_DIR}/../library/zettelkasten.py list_by_last_modified '$PREFIX' -1)"
 }
 
 # list! 
