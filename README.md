@@ -8,7 +8,7 @@ SETUP
 Dependencies:
 - Python 3.8+
 - nvim
-- [fzf](https://github.com/junegunn/fzf) (only needed for search features)
+- [fzf](https://github.com/junegunn/fzf)
 
 Set the following in your shell:
 
@@ -30,18 +30,25 @@ EXAMPLES
 
     zl
 
-Produces:
+Opens `fzf` with the following structure:
 
     07-20 1     foo
            1a   another thought
 
           2     bar
 
+Hit `enter` to select a file and then:
+- print the filename with `zp`
+- copy the filename with `zc`
+- open the file with `zv`
+
 ### Move Zettelkasten files (`zm`)
 
-Moving means both renaming the file and all references to it.
+Moving means entails both:
+1. renaming the file
+2. rewriting all references to it
 
-Insert reference:
+For example:
 
     echo "a link to file 2-bar.md" >> 1a-another-thought.md
 
@@ -55,7 +62,7 @@ New hierarchy:
            1a     another thought
             1a1   bar
 
-Updated reference:
+The reference in _1a-another-thought.md_ is updated:
 
     a link to file 1a1-bar.md
 
@@ -71,11 +78,11 @@ Filenames have the following structure:
     ^    ^
     UID  TAGS      ^ DESCRIPTION
 
-Tags are prefaced, all-caps.
+Tags preface the description and are all-caps.
 
 ### UID
 
-Per usual practice the UID consists of alternating numbers and characters.
+Per usual practice, the UID consists of alternating numbers and characters.
 
 ### Lists
 
@@ -126,7 +133,9 @@ ALL COMMANDS
 - `zl`: **list** files
 - `zm`: **move** file and update references
 - `zg`: **grep** files
-- `zp`: **print** print the previous file created or chosen
+- `zp`: **print** the previous file created/chosen
+- `zc`: **copy** --''--
+- `zv`: open in **vim** the previous file created/chosen
 
 REFERENCES
 ====================
