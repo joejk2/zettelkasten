@@ -12,9 +12,9 @@ Dependencies:
 
 Set the following in your shell:
 
-    export ZETTELKASTEN_SOURCE=$DEV/zettelkasten
+    export ZETTELKASTEN_SOURCE=/path/to/zettelkasten
     source $ZETTELKASTEN_SOURCE/bin/aliases.sh
-    export PATH=${PATH}:$ZETTELKASTEN_SOURCE
+    export PATH=${PATH}:$ZETTELKASTEN_SOURCE/bin
 
 
 EXAMPLES
