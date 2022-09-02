@@ -44,7 +44,7 @@ Hit `enter` to select a file and then:
 
 ### Move Zettelkasten files (`zm`)
 
-Moving means entails both:
+Moving entails both:
 1. renaming the file
 2. rewriting all references to it
 
