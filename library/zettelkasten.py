@@ -12,12 +12,19 @@
 
 
 import glob
+import itertools
 import os
 import re
 import time
+import re
 import sys
 
+
 DELIM = "-"
+HEADER_DEPTH = 3  # number of lines to search
+PRIORITY_LEN = (
+    2  # number of characters to regard part of priority definition (including 'P')
+)
 
 
 def dash_separated(*args):
@@ -143,21 +150,32 @@ def generate_filename(parent: str, *args):
 ####################################################################################################
 # List files
 ####################################################################################################
-def list_dated(prefix='*'):
+def list_dated(prefix="*"):
     return [
         (time.strftime("%m-%d", time.localtime(os.path.getmtime(f))), f)
         for f in glob.glob(f"{prefix}*.md")
     ]
 
 
-def list_sorted(dated_files, sort_by_last_modified):
+def list_priority(prefix="*"):
+    def priority(f):
+        with open(f) as _file:
+            for l in itertools.islice(_file, HEADER_DEPTH):
+                if re.match("^P", l):
+                    return (l.strip("\n"))[:PRIORITY_LEN]
+        return "\u00A0 "
+
+    return [(priority(f), f) for f in glob.glob(f"{prefix}*.md")]
+
+
+def list_sorted(tagged_files, sort_by_tag):
     def rank(last_updated, filename):
         uid = uid_components(select_uid(filename))
-        return (last_updated, uid) if sort_by_last_modified else uid
+        return (last_updated, uid) if sort_by_tag else uid
 
     return [
         (date, filename)
-        for date, filename in sorted(dated_files, key=lambda x: rank(x[0], x[1]))
+        for date, filename in sorted(tagged_files, key=lambda x: rank(x[0], x[1]))
     ]
 
 
@@ -185,8 +203,9 @@ def max_tag_chars(filename_components):
 
 
 def list_arranged(
-    filename_components, break_on_uid=False, break_on_date=False, order=1
+    filename_components, break_on_uid=False, break_on_date=False, order=1, date_len=5
 ):
+    # TODO: update 'date' to 'tag' (where the latter might be priority)
     print_components = []
     _max_uid_chars = max_uid_chars(filename_components)
     _max_tag_chars = max_tag_chars(filename_components)
@@ -203,10 +222,12 @@ def list_arranged(
 
         print_components.append(
             [
-                c["date"] if c["date"] != last_date else "\u00A0" + " " * 4,
+                c["date"]
+                if c["date"] != last_date
+                else "\u00A0" + " " * (date_len - 1),
                 # preface with spaces for every level to the UID:
                 "  " * len(uid_cs),
-                '`' + c["uid"],
+                "`" + c["uid"],
                 # pad up to _max_uid_chars + 2:
                 " " * (_max_uid_chars - len(uid_cs) - len(c["uid"]) + 2),
                 c["tags"],
@@ -218,14 +239,12 @@ def list_arranged(
         last_date = c["date"]
         last_uid_zeroth = uid_cs[0]
 
-    return "\n".join(
-        ["".join(c) for c in print_components[::int(order)]]
-    )
+    return "\n".join(["".join(c) for c in print_components[:: int(order)]])
 
 
 def list_by_uid(prefix=None, order=1):
     return list_arranged(
-        list_decomposed(list_sorted(list_dated(prefix), sort_by_last_modified=False)),
+        list_decomposed(list_sorted(list_dated(prefix), sort_by_tag=False)),
         break_on_uid=True,
         order=order,
     )
@@ -233,9 +252,18 @@ def list_by_uid(prefix=None, order=1):
 
 def list_by_last_modified(prefix=None, order=1):
     return list_arranged(
-        list_decomposed(list_sorted(list_dated(prefix), sort_by_last_modified=True)),
+        list_decomposed(list_sorted(list_dated(prefix), sort_by_tag=True)),
         break_on_date=True,
         order=order,
+    )
+
+
+def list_by_priority(prefix=None, order=1):
+    return list_arranged(
+        list_decomposed(list_sorted(list_priority(prefix), sort_by_tag=True)),
+        break_on_date=True,
+        order=order,
+        date_len=PRIORITY_LEN,
     )
 
 

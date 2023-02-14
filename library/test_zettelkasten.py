@@ -79,12 +79,12 @@ DATED_FILES = [
 
 
 def test_list_sorted():
-    assert list_sorted(DATED_FILES, sort_by_last_modified=False) == [
+    assert list_sorted(DATED_FILES, sort_by_tag=False) == [
         DATED_FILES[0],
         DATED_FILES[2],
         DATED_FILES[1],
     ]
-    assert list_sorted(DATED_FILES, sort_by_last_modified=True) == [
+    assert list_sorted(DATED_FILES, sort_by_tag=True) == [
         DATED_FILES[0],
         DATED_FILES[1],
         DATED_FILES[2],

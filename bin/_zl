@@ -15,8 +15,10 @@
 ########################################
 
 SCRIPT_DIR=`dirname "$0"`
+DEFAULT_ORDER="list_by_uid"
 DEFAULT_PREFIX="*"
-PREFIX="${1:-$DEFAULT_PREFIX}"
+ORDER="${1:-$DEFAULT_ORDER}"
+PREFIX="${2:-$DEFAULT_PREFIX}"
 
 # assemble a filename from the components that are returned from zettelkasten.py 
 cmd_assemble_filename='tr -s " " | cut -d" " -f2- | sed "s/\`//" | sed "s/$/.md/" | sed "s/ /-/g"'
@@ -34,7 +36,7 @@ function fn_fzf() {
 }
 
 # list! 
-RESULT=`python ${SCRIPT_DIR}/../library/zettelkasten.py list_by_uid $PREFIX -1 | 
+RESULT=`python ${SCRIPT_DIR}/../library/zettelkasten.py $ORDER $PREFIX -1 |
 fn_fzf | 
 fn_assemble_filename`
 
