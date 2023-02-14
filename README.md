@@ -12,9 +12,9 @@ Dependencies:
 
 Set the following in your shell:
 
-    export ZETTELKASTEN_SOURCE=$DEV/zettelkasten
+    export ZETTELKASTEN_SOURCE=/path/to/zettelkasten
     source $ZETTELKASTEN_SOURCE/bin/aliases.sh
-    export PATH=${PATH}:$ZETTELKASTEN_SOURCE
+    export PATH=${PATH}:$ZETTELKASTEN_SOURCE/bin
 
 
 EXAMPLES
@@ -44,7 +44,7 @@ Hit `enter` to select a file and then:
 
 ### Move Zettelkasten files (`zm`)
 
-Moving means entails both:
+Moving entails both:
 1. renaming the file
 2. rewriting all references to it
 
