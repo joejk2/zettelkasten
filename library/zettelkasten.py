@@ -203,7 +203,12 @@ def max_tag_chars(filename_components):
 
 
 def list_arranged(
-    filename_components, break_on_uid=False, break_on_date=False, order=1, date_len=5
+    filename_components,
+    break_on_uid=False,
+    break_on_date=False,
+    order=1,
+    date_len=5,
+    pad_uid=True,
 ):
     # TODO: update 'date' to 'tag' (where the latter might be priority)
     print_components = []
@@ -220,20 +225,21 @@ def list_arranged(
         ):
             print_components.append("")
 
+        uid_padding = " " * (len(uid_cs) if pad_uid else 1) + "`"
+        tag_padding = " " * (_max_uid_chars - len(uid_padding) - len(c["uid"]) + 2)
+        description_padding = " " * ((_max_tag_chars - len(c["tags"])) + 1)
+
         print_components.append(
             [
                 c["date"]
                 if c["date"] != last_date
                 else "\u00A0" + " " * (date_len - 1),
-                # preface with spaces for every level to the UID:
-                "  " * len(uid_cs),
-                "`" + c["uid"],
-                # pad up to _max_uid_chars + 2:
-                " " * (_max_uid_chars - len(uid_cs) - len(c["uid"]) + 2),
+                uid_padding,
+                c["uid"],
+                tag_padding,
                 c["tags"],
-                # pad up to _max_tag_chars + 1:
-                " " * ((_max_tag_chars - len(c["tags"])) + 1),
-                "  " * (len(uid_cs) - 1) + c["description"],
+                description_padding,
+                c["description"],
             ],
         )
         last_date = c["date"]
@@ -264,6 +270,7 @@ def list_by_priority(prefix=None, order=1):
         break_on_date=True,
         order=order,
         date_len=PRIORITY_LEN,
+        pad_uid=False,
     )
 
 
