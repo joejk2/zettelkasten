@@ -225,20 +225,23 @@ def list_arranged(
         ):
             print_components.append("")
 
-        uid_padding = " " * (len(uid_cs) if pad_uid else 1) + "`"
-        tag_padding = " " * (_max_uid_chars - len(uid_padding) - len(c["uid"]) + 2)
-        description_padding = " " * ((_max_tag_chars - len(c["tags"])) + 1)
+        uid_padding_len = len(uid_cs) if pad_uid else 1
+        uid_prefix = " " * uid_padding_len + "`"
+        tag_prefix = " " * (_max_uid_chars - len(uid_prefix) - len(c["uid"]) + 2)
+        description_prefix = " " * uid_padding_len + " " * (
+            (_max_tag_chars - len(c["tags"]))
+        )
 
         print_components.append(
             [
                 c["date"]
                 if c["date"] != last_date
                 else "\u00A0" + " " * (date_len - 1),
-                uid_padding,
+                uid_prefix,
                 c["uid"],
-                tag_padding,
+                tag_prefix,
                 c["tags"],
-                description_padding,
+                description_prefix,
                 c["description"],
             ],
         )
