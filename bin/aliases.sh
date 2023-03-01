@@ -7,11 +7,6 @@ function zl() {
     source $ZETTELKASTEN_SOURCE/bin/_zl list_by_uid "$@"
 }
 
-function zs() { # for 'zettelkasten subset' - generally run after 'zl'
-    prefix=`echo $zp | cut -d "-" -f 1`
-    source $ZETTELKASTEN_SOURCE/bin/_zl list_by_uid $prefix
-}
-
 function zt() { # for 'zettelkasten tasks'
     source $ZETTELKASTEN_SOURCE/bin/_zl list_by_priority "$@"
 }

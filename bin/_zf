@@ -1,0 +1,19 @@
+#!/bin/zsh
+#
+########################################
+# zf = 'zettelkasten filter' 
+#
+# Only used via _zl! 
+#
+# For example:
+#   given '17a1-foo-bar.md' - will list all 17* files
+########################################
+
+SCRIPT_DIR=`dirname "$0"`
+#
+# $@:  filename (e.g. 17a1-foo-bar.md)
+# cut: uid (e.g. 17a1)
+# awk: leading number (e.g. 17)
+PREFIX=`echo "$@" | cut -d - -f 1 | awk -F'[^0-9]+' '{print $1}'`
+
+python ${SCRIPT_DIR}/../library/zettelkasten.py list_by_uid $PREFIX -1
