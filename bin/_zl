@@ -13,7 +13,7 @@
 #   '?' to preview
 #   'ctrl-n' to list by name
 #   'ctrl-l' to list by last updated
-#   'ctrl-f' to filter by prefix
+#   'ctrl-i' to subset by prefIx
 ########################################
 
 SCRIPT_DIR=`dirname "$0"`
@@ -35,7 +35,7 @@ function fn_fzf() {
     --bind='?:toggle-preview' \
     --bind "ctrl-n:reload(python ${SCRIPT_DIR}/../library/zettelkasten.py list_by_uid '$PREFIX' -1)" \
     --bind "ctrl-l:reload(python ${SCRIPT_DIR}/../library/zettelkasten.py list_by_last_modified '$PREFIX' -1)" \
-    --bind "ctrl-f:reload(echo {} | ${cmd_assemble_filename} | xargs ${SCRIPT_DIR}/_zf)+clear-query"
+    --bind "ctrl-i:reload(echo {} | ${cmd_assemble_filename} | xargs ${SCRIPT_DIR}/_zi)+clear-query"
 }
 
 # list! 

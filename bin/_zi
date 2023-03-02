@@ -1,7 +1,8 @@
 #!/bin/zsh
 #
 ########################################
-# zf = 'zettelkasten filter' 
+# zi = 'zettelkasten subset by prefIx' 
+# (this is allows for the ergonomic shortcut ctrl-i)
 #
 # Only used via _zl! 
 #
