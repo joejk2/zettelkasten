@@ -62,17 +62,8 @@ def select_text(filename: str) -> str:
     return "-".join(filename.split(".md")[0].split(DELIM)[1:])
 
 
-def select_tags_description(text: str) -> str:
-    tags, description = [], []
-    reading_tags = True
-    for word in text.split("-"):
-        if not str.isupper(word):
-            reading_tags = False
-        if reading_tags:
-            tags.append(word)
-        else:
-            description.append(word)
-    return " ".join(tags), " ".join(description)
+def select_description(text: str) -> str:
+    return text.replace("-", " ")
 
 
 ####################################################################################################
@@ -184,11 +175,10 @@ def list_decomposed(dated_files):
         dict(
             date=date,
             uid=select_uid(filename),
-            tags=tags,
             description=description,
         )
         for date, filename in dated_files
-        for tags, description in [select_tags_description(select_text(filename))]
+        for description in [select_description(select_text(filename))]
     ]
 
 
@@ -196,10 +186,6 @@ def max_uid_chars(filename_components):
     return max(
         [len(uid_components(c["uid"])) + len(c["uid"]) for c in filename_components]
     )
-
-
-def max_tag_chars(filename_components):
-    return max([len(c["tags"]) for c in filename_components])
 
 
 def list_arranged(
@@ -213,7 +199,6 @@ def list_arranged(
     # TODO: update 'date' to 'tag' (where the latter might be priority)
     print_components = []
     _max_uid_chars = max_uid_chars(filename_components)
-    _max_tag_chars = max_tag_chars(filename_components)
     last_date = None
     last_uid_zeroth = None
 
@@ -227,9 +212,9 @@ def list_arranged(
 
         uid_padding_len = len(uid_cs) if pad_uid else 1
         uid_prefix = " " * uid_padding_len + "`"
-        tag_prefix = " " * (_max_uid_chars - len(uid_prefix) - len(c["uid"]) + 2)
-        description_prefix = " " * uid_padding_len + " " * (
-            (_max_tag_chars - len(c["tags"]))
+        description_prefix = (
+            " " * (_max_uid_chars - len(uid_prefix) - len(c["uid"]) + 2)
+            + " " * uid_padding_len
         )
 
         print_components.append(
@@ -239,8 +224,6 @@ def list_arranged(
                 else "\u00A0" + " " * (date_len - 1),
                 uid_prefix,
                 c["uid"],
-                tag_prefix,
-                c["tags"],
                 description_prefix,
                 c["description"],
             ],
