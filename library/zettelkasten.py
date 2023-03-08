@@ -141,10 +141,14 @@ def generate_filename(parent: str, *args):
 ####################################################################################################
 # List files
 ####################################################################################################
+def filter(prefix):
+    return f"{prefix}[-|a-z]*.md"
+
+
 def list_dated(prefix="*"):
     return [
         (time.strftime("%m-%d", time.localtime(os.path.getmtime(f))), f)
-        for f in glob.glob(f"{prefix}*.md")
+        for f in glob.glob(filter(prefix))
     ]
 
 
@@ -156,7 +160,7 @@ def list_priority(prefix="*"):
                     return (l.strip("\n"))[:PRIORITY_LEN]
         return "\u00A0 "
 
-    return [(priority(f), f) for f in glob.glob(f"{prefix}*.md")]
+    return [(priority(f), f) for f in glob.glob(filter(prefix))]
 
 
 def list_sorted(tagged_files, sort_by_tag):
