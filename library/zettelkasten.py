@@ -161,24 +161,24 @@ def list_priority(prefix="*"):
 
 
 def list_sorted(tagged_files, sort_by_tag):
-    def rank(last_updated, filename):
+    def rank(tag, filename):
         uid = uid_components(select_uid(filename))
-        return (last_updated, uid) if sort_by_tag else uid
+        return (tag, uid) if sort_by_tag else uid
 
     return [
-        (date, filename)
-        for date, filename in sorted(tagged_files, key=lambda x: rank(x[0], x[1]))
+        (tag, filename)
+        for tag, filename in sorted(tagged_files, key=lambda x: rank(x[0], x[1]))
     ]
 
 
-def list_decomposed(dated_files):
+def list_decomposed(tagged_files):
     return [
         dict(
-            date=date,
+            tag=tag,
             uid=select_uid(filename),
             description=description,
         )
-        for date, filename in dated_files
+        for tag, filename in tagged_files
         for description in [select_description(select_text(filename))]
     ]
 
@@ -190,7 +190,7 @@ def max_uid_level_max_tag_chars(filename_components):
         max_uid_level = (
             l if (l := len(uid_components(c["uid"]))) > max_uid_level else max_uid_level
         )
-        max_chars_tag = l if (l := len(c["date"])) > max_chars_tag else max_chars_tag
+        max_chars_tag = l if (l := len(c["tag"])) > max_chars_tag else max_chars_tag
     return max_uid_level, max_chars_tag
 
 
@@ -200,7 +200,7 @@ def list_arranged(
     break_on_tag=False,
     order=1,
     pad_uid=True,
-    print_all_dates=False,
+    print_all_tags=False,
 ):
     print_components = []
     _max_uid_level, _max_chars_tag = max_uid_level_max_tag_chars(filename_components)
@@ -209,8 +209,7 @@ def list_arranged(
 
     for c in filename_components:
         uid_cs = uid_components(c["uid"])
-        # TODO: rename c["date"] -> c["tag"]
-        if (break_on_tag and last_tag and c["date"] != last_tag) or (
+        if (break_on_tag and last_tag and c["tag"] != last_tag) or (
             break_on_uid and last_uid_zeroth and uid_cs[0] != last_uid_zeroth
         ):
             print_components.append("")
@@ -225,8 +224,8 @@ def list_arranged(
 
         print_components.append(
             [
-                c["date"] + "\u00A0" * (_max_chars_tag - len(c["date"]))
-                if c["date"] != last_tag or print_all_dates
+                c["tag"] + "\u00A0" * (_max_chars_tag - len(c["tag"]))
+                if c["tag"] != last_tag or print_all_tags
                 else "\u00A0" * _max_chars_tag,
                 uid_prefix,
                 c["uid"],
@@ -234,7 +233,7 @@ def list_arranged(
                 c["description"],
             ],
         )
-        last_tag = c["date"]
+        last_tag = c["tag"]
         last_uid_zeroth = uid_cs[0]
 
     return "\n".join(["".join(c) for c in print_components[:: int(order)]])
@@ -261,7 +260,7 @@ def list_by_priority(prefix=None, order=1):
         list_decomposed(list_sorted(list_priority(prefix), sort_by_tag=True)),
         break_on_tag=True,
         order=order,
-        print_all_dates=True,
+        print_all_tags=True,
     )
 
 
