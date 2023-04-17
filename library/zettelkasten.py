@@ -22,9 +22,6 @@ import sys
 
 DELIM = "-"
 HEADER_DEPTH = 3  # number of lines to search
-PRIORITY_LEN = (
-    2  # number of characters to regard part of priority definition (including 'P')
-)
 
 
 def dash_separated(*args):
@@ -156,11 +153,11 @@ def list_priority(prefix="*"):
     def priority(f):
         with open(f) as _file:
             for l in itertools.islice(_file, HEADER_DEPTH):
-                if re.match("^P", l):
-                    return (l.strip("\n"))[:PRIORITY_LEN]
-        return "\u00A0 "
+                if re.match("^> P[0-9]", l):
+                    return l.strip("^> ").strip("\n")
+        return None
 
-    return [(priority(f), f) for f in glob.glob(filter(prefix))]
+    return [(p, f) for f in glob.glob(filter(prefix)) if (p := priority(f)) is not None]
 
 
 def list_sorted(tagged_files, sort_by_tag):
@@ -186,30 +183,34 @@ def list_decomposed(dated_files):
     ]
 
 
-def max_uid_chars(filename_components):
-    return max(
-        [len(uid_components(c["uid"])) + len(c["uid"]) for c in filename_components]
-    )
+def max_uid_level_max_tag_chars(filename_components):
+    max_uid_level = 0
+    max_chars_tag = 0
+    for c in filename_components:
+        max_uid_level = (
+            l if (l := len(uid_components(c["uid"]))) > max_uid_level else max_uid_level
+        )
+        max_chars_tag = l if (l := len(c["date"])) > max_chars_tag else max_chars_tag
+    return max_uid_level, max_chars_tag
 
 
 def list_arranged(
     filename_components,
     break_on_uid=False,
-    break_on_date=False,
+    break_on_tag=False,
     order=1,
-    date_len=5,
     pad_uid=True,
+    print_all_dates=False,
 ):
-    # TODO: update 'date' to 'tag' (where the latter might be priority)
     print_components = []
-    _max_uid_chars = max_uid_chars(filename_components)
-    last_date = None
+    _max_uid_level, _max_chars_tag = max_uid_level_max_tag_chars(filename_components)
+    last_tag = None
     last_uid_zeroth = None
 
     for c in filename_components:
         uid_cs = uid_components(c["uid"])
-
-        if (break_on_date and last_date and c["date"] != last_date) or (
+        # TODO: rename c["date"] -> c["tag"]
+        if (break_on_tag and last_tag and c["date"] != last_tag) or (
             break_on_uid and last_uid_zeroth and uid_cs[0] != last_uid_zeroth
         ):
             print_components.append("")
@@ -217,22 +218,23 @@ def list_arranged(
         uid_padding_len = len(uid_cs) if pad_uid else 1
         uid_prefix = " " * uid_padding_len + "`"
         description_prefix = (
-            " " * (_max_uid_chars - len(uid_prefix) - len(c["uid"]) + 2)
+            " "
+            * (_max_uid_level - len(uid_prefix) - 2 * len(uid_components(c["uid"])) + 2)
             + " " * uid_padding_len
         )
 
         print_components.append(
             [
-                c["date"]
-                if c["date"] != last_date
-                else "\u00A0" + " " * (date_len - 1),
+                c["date"] + "\u00A0" * (_max_chars_tag - len(c["date"]))
+                if c["date"] != last_tag or print_all_dates
+                else "\u00A0" * _max_chars_tag,
                 uid_prefix,
                 c["uid"],
                 description_prefix,
                 c["description"],
             ],
         )
-        last_date = c["date"]
+        last_tag = c["date"]
         last_uid_zeroth = uid_cs[0]
 
     return "\n".join(["".join(c) for c in print_components[:: int(order)]])
@@ -249,7 +251,7 @@ def list_by_uid(prefix=None, order=1):
 def list_by_last_modified(prefix=None, order=1):
     return list_arranged(
         list_decomposed(list_sorted(list_dated(prefix), sort_by_tag=True)),
-        break_on_date=True,
+        break_on_tag=True,
         order=order,
     )
 
@@ -257,10 +259,9 @@ def list_by_last_modified(prefix=None, order=1):
 def list_by_priority(prefix=None, order=1):
     return list_arranged(
         list_decomposed(list_sorted(list_priority(prefix), sort_by_tag=True)),
-        break_on_date=True,
+        break_on_tag=True,
         order=order,
-        date_len=PRIORITY_LEN,
-        pad_uid=False,
+        print_all_dates=True,
     )
 
 
