@@ -18,8 +18,8 @@ export zp=$FILENAME
 
 # write header 
 DATE=`date +%F`
-echo "_Created:${DATE}_" >> ${FILENAME}
-echo "_Tags:_" >> ${FILENAME}
+echo ">> Created:${DATE}" >> ${FILENAME}
+echo ">> :" >> ${FILENAME}
 echo "\n" >> ${FILENAME}
 
 nvim -c 'startinsert' + ${FILENAME}

@@ -21,9 +21,10 @@ DEFAULT_ORDER="list_by_uid"
 DEFAULT_PREFIX="*"
 ORDER="${1:-$DEFAULT_ORDER}"
 PREFIX="${2:-$DEFAULT_PREFIX}"
+TAGS="${@:3}"
 
 # assemble a filename from the components that are returned from zettelkasten.py 
-cmd_assemble_filename='tr -s " " | cut -d" " -f2- | sed "s/\`//" | sed "s/$/.md/" | sed "s/ /-/g"'
+cmd_assemble_filename='tr -s " " | cut -d"\`" -f2- | sed "s/$/.md/" | sed "s/ /-/g"'
 alias fn_assemble_filename=${cmd_assemble_filename}
 
 # fzf configuration 
@@ -39,7 +40,7 @@ function fn_fzf() {
 }
 
 # list! 
-RESULT=`python ${SCRIPT_DIR}/../library/zettelkasten.py $ORDER $PREFIX -1 |
+RESULT=`python ${SCRIPT_DIR}/../library/zettelkasten.py $ORDER $PREFIX -1 $TAGS |
 fn_fzf | 
 fn_assemble_filename`
 

@@ -14,14 +14,13 @@
 import glob
 import itertools
 import os
-import re
 import time
 import re
 import sys
 
 
 DELIM = "-"
-HEADER_DEPTH = 3  # number of lines to search
+TAG_LINE_NUMBER = 2
 
 
 def dash_separated(*args):
@@ -149,15 +148,21 @@ def list_dated(prefix="*"):
     ]
 
 
-def list_priority(prefix="*"):
-    def priority(f):
+def list_header(prefix="*", header_tags=""):
+    def sorted_header(f):
         with open(f) as _file:
-            for l in itertools.islice(_file, HEADER_DEPTH):
-                if re.match("^> P[0-9]", l):
-                    return l.strip("^> ").strip("\n")
+            for l in itertools.islice(_file, TAG_LINE_NUMBER - 1, TAG_LINE_NUMBER):
+                if re.match("^>> ", l) and all(
+                    [t in l.split() for t in header_tags.split()]
+                ):
+                    return " ".join(sorted(l.strip("^>> ").strip("\n").split()))
         return None
 
-    return [(p, f) for f in glob.glob(filter(prefix)) if (p := priority(f)) is not None]
+    return [
+        (ts, f)
+        for f in glob.glob(filter(prefix))
+        if (ts := sorted_header(f)) is not None
+    ]
 
 
 def list_sorted(tagged_files, sort_by_tag):
@@ -255,11 +260,14 @@ def list_by_last_modified(prefix=None, order=1):
     )
 
 
-def list_by_priority(prefix=None, order=1):
+def list_by_header(prefix=None, order=1, header_tags=""):
     return list_arranged(
-        list_decomposed(list_sorted(list_priority(prefix), sort_by_tag=True)),
+        list_decomposed(
+            list_sorted(list_header(prefix, header_tags), sort_by_tag=True)
+        ),
         break_on_tag=True,
         order=order,
+        pad_uid=False,
         print_all_tags=True,
     )
 

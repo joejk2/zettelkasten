@@ -8,5 +8,5 @@ function zl() {
 }
 
 function zt() { # for 'zettelkasten tasks'
-    source $ZETTELKASTEN_SOURCE/bin/_zl list_by_priority "$@"
+    source $ZETTELKASTEN_SOURCE/bin/_zl list_by_header "$@"
 }
