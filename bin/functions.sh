@@ -1,3 +1,7 @@
+# setup 
+SCRIPT_DIR=`dirname "$0"`
+
+
 ########################################
 # zc = 'zettelkasten copy' 
 #
@@ -99,9 +103,6 @@ function zm() {
 # example usage: zn 1-foo-bar.md TAG foo bar
 ########################################
 function zn() {
-    # setup 
-    SCRIPT_DIR=`dirname "$0"`
-
     # determine filename and export result
     FILENAME=`python ${SCRIPT_DIR}/../library/zettelkasten.py generate_filename "$@" | tr -d '\n'`
     export zp=$FILENAME
