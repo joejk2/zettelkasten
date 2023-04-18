@@ -152,7 +152,7 @@ def list_header(prefix="*", header_tags=""):
     def sorted_header(f):
         with open(f) as _file:
             for l in itertools.islice(_file, TAG_LINE_NUMBER - 1, TAG_LINE_NUMBER):
-                if re.match("^>> ", l) and all(
+                if header_tags == "" or all(
                     [t in l.split() for t in header_tags.split()]
                 ):
                     return " ".join(sorted(l.strip("^>> ").strip("\n").split()))
