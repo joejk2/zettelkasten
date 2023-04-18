@@ -10,52 +10,7 @@ function zc() {
 }
 
 ########################################
-# zp = 'zettelkasten previous' 
-#
-# print the filename previously created or chosen
-#
-# example usage: zp
-########################################
-function zp() {
-    echo $zp 
-}
-
-function zl() {
-    source $ZETTELKASTEN_SOURCE/bin/_zl list_by_uid "$@"
-}
-
-function zt() { # for 'zettelkasten tasks'
-    source $ZETTELKASTEN_SOURCE/bin/_zl list_by_header "$@"
-}
-
-########################################
-# zn = 'zettelkasten new' 
-#
-# create a new filename  
-#
-# example usage: zn / foo bar
-# example usage: zn 1-foo-bar.md TAG foo bar
-########################################
-function zn() {
-    # setup 
-    SCRIPT_DIR=`dirname "$0"`
-
-    # determine filename and export result
-    FILENAME=`python ${SCRIPT_DIR}/../library/zettelkasten.py generate_filename "$@" | tr -d '\n'`
-    export zp=$FILENAME
-
-    # write header 
-    DATE=`date +%F`
-    echo ">> ${DATE}" >> ${FILENAME}
-    echo ">> :" >> ${FILENAME}
-    echo "\n" >> ${FILENAME}
-
-    nvim -c 'startinsert' + ${FILENAME}
-}
-
-
-########################################
-# zg = 'zettelkasten grep' 
+# 'zettelkasten grep' 
 #
 # search file contents 
 #
@@ -81,9 +36,15 @@ function zg() {
     export zp=$selected 
 }
 
+########################################
+# 'zettelkasten list'
+########################################
+function zl() {
+    source $ZETTELKASTEN_SOURCE/bin/_zl list_by_uid "$@"
+}
 
 ########################################
-# zm = 'zettelkasten move' 
+# 'zettelkasten move'
 #
 # move a file and update all references to it 
 #
@@ -128,10 +89,52 @@ function zm() {
     echo ${NEW_FILENAME}  
     export zp=$NEW_FILENAME
 }
- 
 
 ########################################
-# zv = 'zettelkasten vim' 
+# 'zettelkasten new' 
+#
+# create a new filename  
+#
+# example usage: zn / foo bar
+# example usage: zn 1-foo-bar.md TAG foo bar
+########################################
+function zn() {
+    # setup 
+    SCRIPT_DIR=`dirname "$0"`
+
+    # determine filename and export result
+    FILENAME=`python ${SCRIPT_DIR}/../library/zettelkasten.py generate_filename "$@" | tr -d '\n'`
+    export zp=$FILENAME
+
+    # write header 
+    DATE=`date +%F`
+    echo ">> ${DATE}" >> ${FILENAME}
+    echo ">> :" >> ${FILENAME}
+    echo "\n" >> ${FILENAME}
+
+    nvim -c 'startinsert' + ${FILENAME}
+}
+ 
+########################################
+# 'zettelkasten previous' 
+#
+# print the filename previously created or chosen
+#
+# example usage: zp
+########################################
+function zp() {
+    echo $zp 
+}
+
+########################################
+# 'zettelkasten tags' 
+########################################
+function zt() { 
+    source $ZETTELKASTEN_SOURCE/bin/_zl list_by_header "$@"
+}
+
+########################################
+# 'zettelkasten vim' 
 #
 # open the most recently listed file in vim  
 #
