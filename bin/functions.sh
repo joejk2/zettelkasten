@@ -1,7 +1,3 @@
-# setup 
-SCRIPT_DIR=`dirname "$0"`
-
-
 ########################################
 # zc = 'zettelkasten copy' 
 #
@@ -104,7 +100,7 @@ function zm() {
 ########################################
 function zn() {
     # determine filename and export result
-    FILENAME=`python ${SCRIPT_DIR}/../library/zettelkasten.py generate_filename "$@" | tr -d '\n'`
+    FILENAME=`python ${ZETTELKASTEN_SOURCE}/library/zettelkasten.py generate_filename "$@" | tr -d '\n'`
     export zp=$FILENAME
 
     # write header 
