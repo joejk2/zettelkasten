@@ -1,3 +1,25 @@
+########################################
+# zc = 'zettelkasten copy' 
+#
+# copy the filename previously created or chosen
+#
+# example usage: zc
+########################################
+function zc() {
+    zp | tr -d '\n' | pbcopy 
+}
+
+########################################
+# zp = 'zettelkasten previous' 
+#
+# print the filename previously created or chosen
+#
+# example usage: zp
+########################################
+function zp() {
+    echo $zp 
+}
+
 function zl() {
     source $ZETTELKASTEN_SOURCE/bin/_zl list_by_uid "$@"
 }
@@ -105,4 +127,16 @@ function zm() {
     # print and export new filename
     echo ${NEW_FILENAME}  
     export zp=$NEW_FILENAME
+}
+ 
+
+########################################
+# zv = 'zettelkasten vim' 
+#
+# open the most recently listed file in vim  
+#
+# example usage: zv
+########################################
+function zv() {
+    echo $zp | xargs nvim
 }
