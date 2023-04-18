@@ -43,6 +43,12 @@ function zl() {
     source $ZETTELKASTEN_SOURCE/bin/_zl list_by_uid "$@"
 }
 
+function zls() {  # static variant
+    DEFAULT_PREFIX="*"
+    PREFIX="${1:-$DEFAULT_PREFIX}"
+    python ${ZETTELKASTEN_SOURCE}/library/zettelkasten.py list_by_uid $PREFIX 1
+}
+
 ########################################
 # 'zettelkasten move'
 #
@@ -128,6 +134,13 @@ function zp() {
 ########################################
 function zt() { 
     source $ZETTELKASTEN_SOURCE/bin/_zl list_by_header "$@"
+}
+
+function zts() { # static variant
+    DEFAULT_PREFIX="*"
+    PREFIX="${1:-$DEFAULT_PREFIX}"
+    TAGS="${@:2}"
+    python ${ZETTELKASTEN_SOURCE}/library/zettelkasten.py list_by_header $PREFIX 1 $TAGS
 }
 
 ########################################
