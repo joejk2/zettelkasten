@@ -138,7 +138,7 @@ def generate_filename(parent: str, *args):
 # List files
 ####################################################################################################
 def filter(prefix):
-    return f"{prefix}[-|a-z]*.md"
+    return f"{select_uid(prefix)}[-|a-z|0-9]*.md"
 
 
 def list_dated(prefix="*"):
@@ -159,9 +159,9 @@ def list_header(prefix="*", header_tags=""):
         return None
 
     return [
-        (ts, f)
+        (sh, f)
         for f in glob.glob(filter(prefix))
-        if (ts := sorted_header(f)) is not None
+        if (sh := sorted_header(f)) is not None
     ]
 
 
